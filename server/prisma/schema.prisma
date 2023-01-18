@@ -15,9 +15,9 @@ datasource db {
 }
 
 model Habit {
-  id         String   @id @default(uuid())
-  title      String
-  created_at DateTime @default(now())
+  id        String   @id @default(uuid())
+  title     String
+  createdAt DateTime @map("created_at")
 
   habitDays HabitDay[]
   weekDays  HabitWeekDay[]
@@ -27,7 +27,7 @@ model Habit {
 
 model Day {
   id        String     @id @default(uuid())
-  date      DateTime
+  date      DateTime   @unique
   dayHabits HabitDay[]
 
   @@index([date])
