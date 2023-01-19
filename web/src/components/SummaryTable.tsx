@@ -10,27 +10,35 @@ const emptyDaysLeft = minimumSummaryDatesSize - summaryDates.length;
 
 export function SummaryTable() {
   return (
-    <div className="w-full flex">
-      <div className="grid grid-rows-7 grid-flow-row gap-3">
+    <div className="flex w-full">
+      <div className="grid-rows-7 grid grid-flow-row gap-3">
         {weekDays.map((day, index) => (
           <div
             key={`week-day-${day}-${index}`}
-            className="text-zinc-400 text-xl font-bold h-10 w-10 flex items-center justify-center"
+            className="flex h-10 w-10 items-center justify-center text-xl font-bold text-zinc-400"
           >
             {day}
           </div>
         ))}
       </div>
-      <div className="grid grid-rows-7 grid-flow-col gap-3">
-        {summaryDates.map(date => (
-          <HabitDay key={date.toISOString()} />
-        ))}
+      <div className="grid-rows-7 grid grid-flow-col gap-3">
+        {summaryDates.map((date) => {
+          return (
+            <HabitDay
+              key={date.toISOString()}
+              activeProps={{
+                total: 5,
+                completed: Math.round(Math.random() * 5),
+              }}
+            />
+          );
+        })}
 
         {emptyDaysLeft > 0 &&
           Array.from({ length: emptyDaysLeft }).map((_, index) => (
             <HabitDay
               key={`empty-day-${index}`}
-              className="opacity-40 cursor-not-allowed"
+              className="cursor-not-allowed opacity-40"
             />
           ))}
       </div>
