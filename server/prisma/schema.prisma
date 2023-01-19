@@ -36,8 +36,8 @@ model Day {
 
 model HabitDay {
   id      String @id @default(uuid())
-  habitId String
-  dayId   String
+  habitId String @map("habit_id")
+  dayId   String @map("day_id")
 
   habit Habit @relation(fields: [habitId], references: [id])
   day   Day   @relation(fields: [dayId], references: [id])
