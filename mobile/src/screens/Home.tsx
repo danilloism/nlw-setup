@@ -1,7 +1,10 @@
 import { View, Text, ScrollView } from 'react-native';
 import { HabitDay, DAY_SIZE } from '../components/HabitDay';
 import { Header } from '../components/Header';
+import { ScrollViewContainer } from '../components/ScrollViewContainer';
 import { generateRangeDatesFromYearStart } from '../utils/date.utils';
+import { ScreenWrapper } from './ScreenWrapper';
+import { useNavigation } from '@react-navigation/native';
 
 const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
 const dates = generateRangeDatesFromYearStart();
@@ -9,8 +12,10 @@ const minimumSummaryDatesSize = 18 * 5;
 const emptyDaysLeft = minimumSummaryDatesSize - dates.length;
 
 export function Home() {
+  const { navigate } = useNavigation();
+
   return (
-    <View className="flex-1 bg-background px-8 pt-16">
+    <ScreenWrapper>
       <Header />
       <View className="flex-row mt-6 mb-2">
         {weekDays.map((day, index) => (
@@ -23,24 +28,23 @@ export function Home() {
           </Text>
         ))}
       </View>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 50 }}
-      >
+      <ScrollViewContainer>
         <View className="flex-row flex-wrap">
           {dates.map(date => (
-            <HabitDay key={date.toISOString()} />
+            <HabitDay
+              key={date.toISOString()}
+              onPress={() => navigate('habit', { date: date.toISOString() })}
+            />
           ))}
           {emptyDaysLeft > 0 &&
             Array.from({ length: emptyDaysLeft }).map((_, index) => (
-              <View
+              <HabitDay
+                active={false}
                 key={`empty-day-${index}`}
-                className="bg-zinc-900 rounded-lg border-2 m-1 border-zinc-800 opacity-40"
-                style={{ width: DAY_SIZE, height: DAY_SIZE }}
               />
             ))}
         </View>
-      </ScrollView>
-    </View>
+      </ScrollViewContainer>
+    </ScreenWrapper>
   );
 }
