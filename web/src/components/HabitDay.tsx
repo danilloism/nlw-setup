@@ -2,10 +2,13 @@ import { HTMLAttributes } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import { ProgressBar } from './ProgressBar';
 import { cn } from '../utils/style-utils';
+import { Checkbox } from './Checkbox';
+import dayjs from 'dayjs';
 
 interface ActiveHabitDay {
-  completed: number;
-  total: number;
+  completed?: number;
+  total?: number;
+  date: Date;
 }
 
 interface HabitDayProps extends HTMLAttributes<HTMLDivElement> {
@@ -24,9 +27,14 @@ export function HabitDay({ className, activeProps }: HabitDayProps) {
     return <div className={style} />;
   }
 
-  const completedPercentage = Math.round(
-    (activeProps.completed / activeProps.total) * 100
-  );
+  const { completed = 0, date, total = 0 } = activeProps;
+
+  const completedPercentage =
+    total > 0 ? Math.round((completed / total) * 100) : 0;
+
+  const dayAndMonth = dayjs(date).format('DD/MM');
+  const dayOfWeek = dayjs(date).format('dddd');
+
   return (
     <Popover.Root>
       <Popover.Trigger
@@ -45,11 +53,18 @@ export function HabitDay({ className, activeProps }: HabitDayProps) {
 
       <Popover.Portal>
         <Popover.Content className="flex  min-w-[320px] flex-col rounded-2xl bg-zinc-900 p-6">
-          <span className="font-semibold text-zinc-400">segunda-feira</span>
+          <span className="font-semibold text-zinc-400">{dayOfWeek}</span>
           <span className="mt-1 text-3xl font-extrabold leading-tight">
-            19/01
+            {dayAndMonth}
           </span>
           <ProgressBar currentProgress={completedPercentage} />
+          <div className="mt-6 flex flex-col gap-3">
+            <Checkbox
+              label="Teste testando"
+              labelOptions={{ bold: true, lineThrough: true }}
+            />
+          </div>
+
           <Popover.Arrow
             height={8}
             width={16}
